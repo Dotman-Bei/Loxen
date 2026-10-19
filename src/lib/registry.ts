@@ -2,6 +2,8 @@
 // The frontend writes only: the digest and the schema version. Owner and time come from the chain.
 
 import {
+  BaseError,
+  UserRejectedRequestError,
   createPublicClient,
   createWalletClient,
   custom,
@@ -20,7 +22,31 @@ export const REGISTRY_ABI = parseAbi([
   "function receiptsOf(address owner, uint256 offset, uint256 limit) view returns (uint256[])",
   "function getReceipt(uint256 receiptId) view returns (address owner, bytes32 digest, uint16 schemaVersion, uint64 timestamp)",
   "event ReceiptRegistered(uint256 indexed receiptId, address indexed owner, bytes32 indexed digest, uint16 schemaVersion, uint64 timestamp)",
+  "error EmptyDigest()",
+  "error UnsupportedSchema(uint16 schemaVersion)",
+  "error DuplicateDigest(uint256 existingReceiptId)",
+  "error ReceiptNotFound(uint256 receiptId)",
+  "error EnforcedPause()",
 ]);
+
+/** True when the wallet refused, however deeply viem has wrapped the 4001 error. */
+function isUserRejection(e: unknown): boolean {
+  if (e instanceof BaseError) {
+    return !!e.walk((x) => (x as { code?: number }).code === 4001 || x instanceof UserRejectedRequestError);
+  }
+  return (e as { code?: number }).code === 4001;
+}
+
+/** Plain words for the registry's own errors, as decoded from a failed simulation. */
+function explainRevert(e: unknown): string {
+  const text = `${(e as { shortMessage?: string }).shortMessage ?? ""} ${(e as { message?: string }).message ?? ""}`;
+  if (/DuplicateDigest/.test(text)) return "Your wallet has already recorded this exact digest. Pick a new salt to record a new version.";
+  if (/EnforcedPause/.test(text)) return "The registry is paused for maintenance. Reads still work; try again later.";
+  if (/EmptyDigest/.test(text)) return "The digest was empty, so nothing was sent.";
+  if (/UnsupportedSchema/.test(text)) return "This schema version is not accepted by the registry.";
+  if (/insufficient funds/i.test(text)) return "Your wallet does not hold enough BOT to pay the network gas.";
+  return (e as { shortMessage?: string }).shortMessage ?? "The registry rejected this call in simulation.";
+}
 
 export const chain = defineChain({
   id: TARGET_CHAIN.id,
@@ -82,9 +108,8 @@ export async function commitDigest(
     }
     return { kind: "reverted", hash, reason: "Confirmed, but no receipt event was found. Check the transaction on BOTScan." };
   } catch (e) {
-    const err = e as { code?: number; shortMessage?: string; name?: string };
-    if (err.code === 4001 || err.name === "UserRejectedRequestError") return { kind: "rejected" };
-    return { kind: "reverted", reason: err.shortMessage ?? "The registry rejected this call in simulation." };
+    if (isUserRejection(e)) return { kind: "rejected" };
+    return { kind: "reverted", reason: explainRevert(e) };
   }
 }
 
@@ -186,7 +211,7 @@ export async function receiptById(id: bigint): Promise<ReadResult<ReceiptRow | n
     };
   } catch (e) {
     const msg = (e as { shortMessage?: string }).shortMessage ?? "";
-    if (/revert/i.test(msg)) return { ok: true, data: null };
+    if (/ReceiptNotFound|revert/i.test(msg)) return { ok: true, data: null };
     return rpcFailure(e);
   }
 }
