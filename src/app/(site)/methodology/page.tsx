@@ -56,8 +56,8 @@ const sections = [
       <>
         <p>Each state is a shape and a word, so it reads without colour.</p>
         <div className="doc-states">
-          <div><StatusMark status="live" /><p>Fetched from a configured provider for this brief, carrying the provider’s own timestamp. No provider is live in this build.</p></div>
-          <div><StatusMark status="cached" /><p>Read earlier from a provider whose terms allow caching. Shown with its real age and never called live.</p></div>
+          <div><StatusMark status="live" /><p>Fetched from a configured provider for this brief in the last 10 minutes, with the provider’s own timestamp where it gives one. After 10 minutes the same value is shown as cached.</p></div>
+          <div><StatusMark status="cached" /><p>Read earlier: either served from Loxen’s 60-second cache, or a provider value in a saved brief more than 10 minutes old. Shown with its real age and never called live.</p></div>
           <div><StatusMark status="user" /><p>Entered by you, with the source you name. Kept apart from provider data in every export.</p></div>
           <div><StatusMark status="stale" /><p>Older than the horizon allows (see the next section). The value stays, with its timestamp and age.</p></div>
           <div><StatusMark status="conflicting" /><p>Two sources for the same metric disagree past the threshold. Both values stay; Loxen chooses neither.</p></div>
@@ -103,6 +103,31 @@ const sections = [
             position: "50% 20%",
           }}
         />
+      </>
+    ),
+  },
+  {
+    id: "providers",
+    title: "Where live values come from",
+    body: (
+      <>
+        <p>
+          When a brief names a BOT Chain contract address, <strong>Fetch evidence</strong> asks Loxen’s server to read
+          two public sources. Only the address and network are sent.
+        </p>
+        <ul>
+          <li><strong>BOTScan</strong> (the chain’s explorer): whether the contract is verified, its holder count, all-time transfer count and total supply.</li>
+          <li><strong>BOT Chain RPC</strong> (the chain itself): whether code exists at the address, and the token’s name, symbol and total supply, read at one block whose time becomes the source timestamp.</li>
+        </ul>
+        <p>
+          Each request stops after 8 seconds. A failure is shown as unavailable with its reason, never as zero, and is
+          not cached. Answers are kept in server memory for 60 seconds; a repeat inside that window is labelled cached.
+          BOTScan’s price fields are not used, because their source and definition are not documented.
+        </p>
+        <p>
+          Both sources report total supply, so if they ever disagree by more than 2%, both values are shown as
+          conflicting.
+        </p>
       </>
     ),
   },
@@ -237,9 +262,11 @@ const sections = [
           <tr><td>Brief composer, local save, Markdown and JSON export</td><td>Working</td></tr>
           <tr><td>Stale, conflict and rule checks</td><td>Working, on your entries</td></tr>
           <tr><td>Receipt digest and package</td><td>Working, computed in your browser</td></tr>
-          <tr><td>Registry contract on BOT Chain</td><td>Not deployed yet. The Registry screen says so and will not pretend.</td></tr>
-          <tr><td>Receipt history and profile reads</td><td>Ready; they read nothing until a registry address is set</td></tr>
-          <tr><td>Live providers (BOTScan, BOT Chain RPC, DEX pools)</td><td>Planned, each after its terms and limits are checked</td></tr>
+          <tr><td>Registry contract on BOT Chain</td><td>Deployed and verified on testnet; mainnet not yet</td></tr>
+          <tr><td>Receipt history and profile reads</td><td>Working on testnet</td></tr>
+          <tr><td>BOTScan: contract verification, holders, transfers, total supply</td><td>Live, for BOT Chain contract addresses</td></tr>
+          <tr><td>BOT Chain RPC: contract code, name, symbol, total supply at a block</td><td>Live, for BOT Chain contract addresses</td></tr>
+          <tr><td>Prices, pool liquidity, volume (DEX pools)</td><td>Planned, after a venue’s terms and limits are checked. Enter them by hand meanwhile</td></tr>
           <tr><td>Model summaries</td><td>Off</td></tr>
           <tr><td>Public API for agents</td><td>Planned for a later phase</td></tr>
         </tbody>
@@ -256,7 +283,7 @@ export default function MethodologyPage() {
       lead="The rules behind every status mark, timestamp and receipt, and which parts of Loxen are live today."
       updated="19 October 2026"
       facts={[
-        { label: "Live providers", value: "None in this build" },
+        { label: "Live providers", value: "BOTScan and BOT Chain RPC" },
         { label: "Model-generated text", value: "Off" },
         { label: "Written on-chain", value: "A digest, never the brief" },
       ]}

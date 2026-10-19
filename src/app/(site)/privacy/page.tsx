@@ -28,8 +28,11 @@ const sections = [
     body: (
       <>
         <p>
-          <strong>Nothing, in this version.</strong> Loxen has no account system and no server-side brief storage. If
-          server storage is added, this page will say what is kept, why, and for how long, before that feature ships.
+          <strong>No briefs, no accounts.</strong> Loxen has no account system and no server-side brief storage. When you
+          use Fetch evidence, the contract address and network pass through Loxen’s server to BOTScan and the BOT Chain
+          RPC. The public answers are held in server memory for 60 seconds and then dropped; nothing is written to disk.
+          A per-visitor request count is kept in memory for one minute to stop abuse. If server storage is ever added,
+          this page will say what is kept, why, and for how long, before that feature ships.
         </p>
       </>
     ),
@@ -45,8 +48,9 @@ const sections = [
         </p>
         <p>
           The General Sans typeface is loaded from Fontshare, which receives your IP address and browser details as part
-          of any web request. Reading the registry sends requests to the BOT Chain RPC endpoint, and links to BOTScan open
-          that site under its own terms.
+          of any web request. Reading the registry sends requests from your browser to the BOT Chain RPC endpoint. Fetch
+          evidence sends the contract address from Loxen’s server to BOTScan and the RPC, so they see the server, not
+          you. Links to BOTScan open that site under its own terms.
         </p>
       </>
     ),
@@ -122,7 +126,7 @@ export default function PrivacyPage() {
       lead="Your briefs live in your browser. Only a digest you choose to commit ever reaches BOT Chain, and that part is public for good."
       updated="19 October 2026"
       facts={[
-        { label: "Stored on our servers", value: "Nothing" },
+        { label: "Briefs on our servers", value: "None" },
         { label: "Cookies and analytics", value: "None" },
         { label: "Public on BOT Chain", value: "Wallet, digest, schema, time" },
       ]}
