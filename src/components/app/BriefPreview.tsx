@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { StatusMark } from "@/components/StatusMark";
 import { digestOf, newSalt, committable } from "@/lib/digest";
-import { autoLimitations, autoUnknowns, checkRules, missingMetrics, type EvaluatedEvidence } from "@/lib/evaluate";
+import { autoLimitations, autoUnknowns, checkRules, missingMetrics, sourceMode, type EvaluatedEvidence } from "@/lib/evaluate";
 import { KIND_LABEL, SCHEMA_ID, horizonOf, lensOf, networkOf, type Brief } from "@/lib/schema";
 import { CopyButton } from "./CopyButton";
 
@@ -25,7 +25,7 @@ export function BriefPreview({ brief, evaluated }: { brief: Brief; evaluated: Ev
         <h2>Brief preview</h2>
         <span className="meta">{SCHEMA_ID}</span>
       </div>
-      <p className="preview-mode">Generated from user-provided inputs and local template logic. No live sources.</p>
+      <p className="preview-mode">{sourceMode(brief)}</p>
 
       <div className="pv-section">
         <h3>Question</h3>
@@ -70,7 +70,7 @@ export function BriefPreview({ brief, evaluated }: { brief: Brief; evaluated: Ev
             <span className="dash">—</span>
             <span className="sub">
               <StatusMark status="unavailable" />
-              <span>Not entered, no provider</span>
+              <span>{m.reason}</span>
             </span>
           </div>
         ))}
@@ -107,7 +107,7 @@ export function BriefPreview({ brief, evaluated }: { brief: Brief; evaluated: Ev
       <div className="pv-section">
         <h3>Limitations</h3>
         <ul className="pv-list">
-          {autoLimitations().map((l) => (
+          {autoLimitations(brief).map((l) => (
             <li key={l}>{l}</li>
           ))}
           {brief.limitations.trim() && <li>{brief.limitations.trim()}</li>}

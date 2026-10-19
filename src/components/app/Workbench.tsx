@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 import { StatusMark } from "@/components/StatusMark";
-import { PROVIDERS } from "@/lib/providers";
 import {
   BRIEF_PARTS,
   HORIZONS,
@@ -27,6 +26,7 @@ import { autoLimitations, autoUnknowns, checkAsset, checkRules, missingMetrics, 
 import { briefToJSON, briefToMarkdown, download, slug } from "@/lib/export";
 import { getBrief, newId, saveBrief } from "@/lib/storage";
 import { BriefPreview } from "./BriefPreview";
+import { SourcesCard } from "./SourcesCard";
 
 const PART_TARGET: Record<BriefPart, string> = {
   Question: "card-question",
@@ -222,7 +222,13 @@ export function Workbench() {
                   onChange={(e) => {
                     const query = e.target.value;
                     const c = checkAsset(query);
-                    update({ asset: { ...brief.asset, query, contract: c.kind === "address" && c.ok ? c.checksummed : "" } });
+                    const contract = c.kind === "address" && c.ok ? c.checksummed : "";
+                    const changed = contract.toLowerCase() !== brief.asset.contract.toLowerCase();
+                    update({
+                      asset: { ...brief.asset, query, contract, ...(changed ? { name: undefined, symbol: undefined } : {}) },
+                      // provider values belong to the old asset: drop them when the asset changes
+                      ...(changed ? { evidence: brief.evidence.filter((e) => e.providerId === "user"), providerErrors: [] } : {}),
+                    });
                   }}
                 />
               </div>
@@ -283,25 +289,7 @@ export function Workbench() {
             </div>
           </section>
 
-          <section className="card" id="card-sources" aria-labelledby="h-sources">
-            <div className="card-head">
-              <h2 id="h-sources">Sources</h2>
-              <span className="meta">0 of {PROVIDERS.length} providers configured</span>
-            </div>
-            <ul className="providers">
-              {PROVIDERS.map((p) => (
-                <li key={p.id} className="provider">
-                  <span className="ident">{p.label}</span>
-                  <StatusMark status="unavailable" />
-                  <span className="sub">{p.covers}</span>
-                  <span className="sub">{p.lastGoodFetch ? `Last good fetch ${fmtTime(p.lastGoodFetch)}` : p.note}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="notice" style={{ marginTop: 12 }}>
-              Manual mode: every value below is entered by you and marked User supplied.
-            </p>
-          </section>
+          <SourcesCard brief={brief} update={update} />
 
           <EvidenceCard brief={brief} evaluated={s.evaluated} update={update} />
 
@@ -324,7 +312,7 @@ export function Workbench() {
             <div className="field">
               <label className="label" htmlFor="limits">Limitations you want on record</label>
               <textarea id="limits" className="textarea" rows={2} value={brief.limitations} onChange={(e) => update({ limitations: e.target.value })} />
-              <p className="help">Added automatically: {autoLimitations()[0]}</p>
+              <p className="help">Added automatically: {autoLimitations(brief)[0]}</p>
             </div>
             <div className="field">
               <label className="label" htmlFor="private">Private notes</label>

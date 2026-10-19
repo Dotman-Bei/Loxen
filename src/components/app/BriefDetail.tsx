@@ -222,7 +222,7 @@ export function BriefDetail({ id }: { id: string }) {
                 <h2 id="h-lim">Limitations</h2>
               </div>
               <ul className="pv-list">
-                {autoLimitations().map((l) => (
+                {autoLimitations(brief).map((l) => (
                   <li key={l}>{l}</li>
                 ))}
                 {brief.limitations.trim() && <li>{brief.limitations}</li>}

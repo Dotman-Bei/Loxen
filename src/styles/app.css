@@ -653,6 +653,21 @@
 }
 
 /* ---------- Providers ---------- */
+.fetch-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 16px;
+}
+.spin {
+  animation: spin 900ms linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .providers {
   display: grid;
 }
