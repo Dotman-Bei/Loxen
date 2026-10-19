@@ -1441,7 +1441,13 @@ html.js-reveal [data-reveal].is-in {
   }
   .t-stale .tile-ui,
   .t-user .tile-ui {
-    font-size: 24px;
+    font-size: 20px;
+  }
+  .t-stale .status-detail {
+    display: none;
+  }
+  .big-pair {
+    text-align: left;
   }
   .kinds-ui {
     font-size: 18px;
