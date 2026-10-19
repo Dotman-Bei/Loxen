@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .taste-skill/
+!.env.example
+/.next-*/
+.e2e-registry
