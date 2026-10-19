@@ -3,6 +3,15 @@
 The on-chain half of Loxen: a small registry that records that a wallet committed a digest of a
 research brief at a block. It is optional. Everything else in Loxen works without it.
 
+## Deployments
+
+| Network | Address | Deployed | Source |
+| --- | --- | --- | --- |
+| BOT Chain testnet (968) | [`0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95`](https://scan.bohr.life/address/0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95) | 19 Oct 2026, block 27,422,320, [tx `0x417a…6975`](https://scan.bohr.life/tx/0x417a6a457652caad89926e36ef24c42c0f19befc8ba1f034ac37901425ad6975), 841,034 gas | Verified on BOTScan |
+| BOT Chain mainnet (677) | Not deployed | | |
+
+Pause admin on testnet: `0x0f30fF72C0934919D892Fb4BCe8b261F4B1A0B9E`.
+
 ## What it proves, and what it does not
 
 | A receipt proves | A receipt does not prove |
@@ -90,17 +99,17 @@ Measured gas: `registerReceipt` about 160,000 for a wallet's first receipt; depl
 1. Confirm the network values against the official guide:
    https://dev-docs.botchain.ai/docs/Developers/quick-guide/ (as of this writing: testnet chain 968,
    RPC `https://rpc.bohr.life`; mainnet chain 677, RPC `https://rpc.botchain.ai`).
-2. Install the libraries (they are not committed): `forge install foundry-rs/forge-std OpenZeppelin/openzeppelin-contracts@v5.1.0 --no-git`
-3. Store the deployer key in an encrypted keystore, never in a file:
-   `cast wallet import loxen-deployer --interactive`
-4. Deploy (the script refuses any chain but 968, 677 or a local node):
-   ```
-   export BOT_TESTNET_RPC_URL=https://rpc.bohr.life
-   # optional: export REGISTRY_OWNER=0x… (a multisig or hardware wallet for the pause switch)
-   forge script script/Deploy.s.sol --rpc-url bot_testnet --account loxen-deployer --broadcast
-   ```
-5. Verify the source on BOTScan, then set `NEXT_PUBLIC_LOXEN_REGISTRY_ADDRESS` (and
-   `NEXT_PUBLIC_LOXEN_CHAIN`) for the web app. See `.env.example` at the project root.
+2. **Testnet, one command:** put a funded testnet-only key in `contracts/.env` (gitignored; faucet at
+   https://faucet.botchain.ai/basic), optionally `REGISTRY_OWNER`, then run `npm run deploy:testnet`
+   at the project root. It checks the chain is 968 and the wallet is funded, runs the tests, deploys,
+   verifies on BOTScan (Blockscout API at `https://scan.bohr.life/api/`) and writes the address into
+   `.env.local`. It never prints the key. Restart the dev server afterwards.
+3. **Mainnet:** do not put a mainnet key in a file. Use an encrypted keystore
+   (`cast wallet import loxen-deployer --interactive`) and a multisig or hardware wallet as
+   `REGISTRY_OWNER`, then
+   `forge script script/Deploy.s.sol --rpc-url bot_mainnet --account loxen-deployer --broadcast`.
+4. Libraries are not committed; the deploy script installs them, or run
+   `forge install foundry-rs/forge-std OpenZeppelin/openzeppelin-contracts@v5.1.0 --no-git`.
 
 ## Local end-to-end run
 
