@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink } from "lucide-react";
-import { REGISTRY_ADDRESS, TARGET_CHAIN, chainName, txUrl, addressUrl } from "@/lib/chains";
+import { REGISTRY_ADDRESS, TARGET_CHAIN, chainName } from "@/lib/chains";
+import { ExplorerLink } from "./ExplorerLink";
 import { committable, digestOf, newSalt, shortHex } from "@/lib/digest";
 import { download, slug } from "@/lib/export";
 import { commitDigest, type TxState } from "@/lib/registry";
@@ -228,9 +228,7 @@ export function Registry() {
               <dt>Contract</dt>
               <dd>
                 {REGISTRY_ADDRESS ? (
-                  <a href={addressUrl(REGISTRY_ADDRESS)} rel="noopener" target="_blank">
-                    <code>{shortHex(REGISTRY_ADDRESS)}</code> <ExternalLink size={12} aria-hidden="true" />
-                  </a>
+                  <ExplorerLink kind="address" value={REGISTRY_ADDRESS} />
                 ) : (
                   <span className="dash">Not configured</span>
                 )}
@@ -270,16 +268,14 @@ export function Registry() {
             {tx.kind === "reverted" && <p className="help is-bad">{tx.reason} Nothing was recorded.</p>}
             {tx.kind === "timeout" && (
               <p className="help is-bad">
-                No confirmation after 120 s. It may still confirm: <a href={txUrl(tx.hash)} rel="noopener" target="_blank">check it on BOTScan</a>. Loxen will not
+                No confirmation after 120 s. It may still confirm: <ExplorerLink kind="tx" value={tx.hash} label="check the transaction" />. Loxen will not
                 mark it recorded until it does.
               </p>
             )}
             {tx.kind === "error" && <p className="help is-bad">{tx.reason}</p>}
             {(tx.kind === "pending" || tx.kind === "confirmed") && (
               <p className="note">
-                <a href={txUrl(tx.hash)} rel="noopener" target="_blank">
-                  <code>{shortHex(tx.hash)}</code> on BOTScan <ExternalLink size={12} aria-hidden="true" />
-                </a>
+                Transaction <ExplorerLink kind="tx" value={tx.hash} />
               </p>
             )}
             {tx.kind === "confirmed" && brief && (

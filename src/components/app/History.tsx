@@ -58,7 +58,7 @@ export function History() {
       <section className="card search-card" aria-labelledby="h-search">
         <div className="card-head">
           <h2 id="h-search">Look up a receipt</h2>
-          <span className="meta">Reads BOT Chain directly. Nothing is stored.</span>
+          <span className="meta">Reads {TARGET_CHAIN.name} directly. Nothing is stored.</span>
         </div>
         <form className="search-row" onSubmit={search} role="search">
           <label className="visually-hidden" htmlFor="hq">Wallet address or receipt ID</label>

@@ -1,8 +1,7 @@
-import { ExternalLink } from "lucide-react";
-import { addressUrl, txUrl } from "@/lib/chains";
 import { shortHex } from "@/lib/digest";
 import type { ReceiptRow } from "@/lib/registry";
 import { CopyButton } from "./CopyButton";
+import { ExplorerLink } from "./ExplorerLink";
 
 const fmt = (sec: number) =>
   new Date(sec * 1000).toLocaleString("en-GB", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
@@ -33,7 +32,7 @@ export function ReceiptTable({ rows, empty }: { rows: ReceiptRow[]; empty: React
               <tr key={r.receiptId}>
                 <td className="ident num-left">{r.receiptId}</td>
                 <td>
-                  <a href={addressUrl(r.owner)} rel="noopener" target="_blank"><code>{shortHex(r.owner)}</code></a>
+                  <ExplorerLink kind="address" value={r.owner} />
                 </td>
                 <td className="m-line2">
                   <span className="inline-copy">
@@ -46,9 +45,7 @@ export function ReceiptTable({ rows, empty }: { rows: ReceiptRow[]; empty: React
                 <td className="num m-line2">{fmt(r.timestamp)}</td>
                 <td className="m-line2">
                   {r.txHash ? (
-                    <a href={txUrl(r.txHash)} rel="noopener" target="_blank" className="inline-copy">
-                      <code>{shortHex(r.txHash)}</code> <ExternalLink size={12} aria-hidden="true" />
-                    </a>
+                    <ExplorerLink kind="tx" value={r.txHash} />
                   ) : (
                     <span className="dash">—</span>
                   )}

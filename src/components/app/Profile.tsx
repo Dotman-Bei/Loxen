@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { REGISTRY_ADDRESS, TARGET_CHAIN, chainName, txUrl } from "@/lib/chains";
+import { REGISTRY_ADDRESS, TARGET_CHAIN, chainName } from "@/lib/chains";
+import { ExplorerLink } from "./ExplorerLink";
 import { shortHex } from "@/lib/digest";
 import { summary } from "@/lib/evaluate";
 import { receiptsByOwner, type ReadResult, type ReceiptRow } from "@/lib/registry";
@@ -101,7 +102,7 @@ export function Profile() {
                     {r.txHash && (
                       <>
                         {" · "}
-                        <a href={txUrl(r.txHash)} rel="noopener" target="_blank">BOTScan</a>
+                        <ExplorerLink kind="tx" value={r.txHash} label="Transaction" />
                       </>
                     )}
                   </span>

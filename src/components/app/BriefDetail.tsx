@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ExternalLink } from "lucide-react";
 import { StatusMark } from "@/components/StatusMark";
 import { autoLimitations, autoUnknowns, checkRules, missingMetrics, summary } from "@/lib/evaluate";
 import { briefToJSON, briefToMarkdown, download, slug } from "@/lib/export";
 import { KIND_LABEL, SCHEMA_ID, horizonOf, lensOf, networkOf, type Brief } from "@/lib/schema";
 import { deleteBrief, getBrief } from "@/lib/storage";
-import { addressUrl, chainName, txUrl, BOT_MAINNET, BOT_TESTNET } from "@/lib/chains";
+import { chainName } from "@/lib/chains";
+import { ExplorerLink } from "./ExplorerLink";
 import { shortHex } from "@/lib/digest";
 import { CopyButton } from "./CopyButton";
 
@@ -52,7 +52,6 @@ export function BriefDetail({ id }: { id: string }) {
   const missing = missingMetrics(brief);
   const context = s.evaluated.filter((e) => e.kind === "calculation" || e.kind === "interpretation");
   const r = brief.receipt;
-  const chain = r?.chainId === BOT_MAINNET.id ? BOT_MAINNET : BOT_TESTNET;
 
   return (
     <>
@@ -248,7 +247,7 @@ export function BriefDetail({ id }: { id: string }) {
                 </dd>
                 <dt>Owner</dt>
                 <dd>
-                  <a href={addressUrl(r.owner, chain)} rel="noopener" target="_blank"><code>{shortHex(r.owner)}</code></a>
+                  <ExplorerLink kind="address" value={r.owner} chainId={r.chainId} />
                 </dd>
                 <dt>Network</dt>
                 <dd>{chainName(r.chainId)}</dd>
@@ -258,9 +257,7 @@ export function BriefDetail({ id }: { id: string }) {
                 <dd>{fmt(r.blockTime)}</dd>
                 <dt>Transaction</dt>
                 <dd>
-                  <a href={txUrl(r.txHash, chain)} rel="noopener" target="_blank">
-                    <code>{shortHex(r.txHash)}</code> <ExternalLink size={12} aria-hidden="true" />
-                  </a>
+                  <ExplorerLink kind="tx" value={r.txHash} chainId={r.chainId} />
                 </dd>
               </dl>
             ) : (
