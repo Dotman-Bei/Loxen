@@ -1,6 +1,6 @@
 // Markdown and JSON exports. Both carry the schema, the provider state and every timestamp.
 
-import { PROVIDERS } from "./providers";
+import { PROVIDER_DEFS, isEnabled, providerLabel } from "./providers";
 import {
   KIND_LABEL,
   SCHEMA_ID,
@@ -10,23 +10,24 @@ import {
   networkOf,
   type Brief,
 } from "./schema";
-import { autoLimitations, autoUnknowns, checkRules, evaluateEvidence, missingMetrics } from "./evaluate";
+import { autoLimitations, autoUnknowns, checkRules, evaluateEvidence, missingMetrics, sourceMode } from "./evaluate";
 
 export function briefToJSON(brief: Brief, includePrivateNotes = false) {
   const { privateNotes, ...rest } = brief;
   return {
     schema: SCHEMA_ID,
     exportedAt: new Date().toISOString(),
-    generatedFrom: "user-provided inputs and local template logic",
+    generatedFrom: sourceMode(brief),
     record: brief.receipt ? "committed" : "local-only",
-    providers: PROVIDERS.map((p) => ({ id: p.id, configured: p.configured, lastGoodFetch: p.lastGoodFetch })),
+    providers: PROVIDER_DEFS.map((p) => ({ id: p.id, label: p.label, enabled: p.adapter && isEnabled(p.id) })),
+    providersUsed: [...new Set(brief.evidence.map((e) => e.providerId))].map((id) => ({ id, label: providerLabel(id) })),
     brief: includePrivateNotes ? { ...rest, privateNotes } : rest,
     derived: {
       evidence: evaluateEvidence(brief).map((e) => ({ id: e.id, effectiveStatus: e.effective, age: e.age ?? null, conflict: e.conflictWith ?? null })),
       unavailable: missingMetrics(brief),
       rules: checkRules(brief).map((r) => ({ id: r.rule.id, evaluable: r.evaluable, missing: r.missing })),
       unknowns: autoUnknowns(brief),
-      limitations: autoLimitations(),
+      limitations: autoLimitations(brief),
     },
   };
 }
@@ -60,7 +61,7 @@ export function briefToMarkdown(brief: Brief): string {
   for (const u of autoUnknowns(brief, ev)) L.push(`- ${esc(u)}`);
   if (brief.unknowns.trim()) L.push(`- ${esc(brief.unknowns.trim())}`);
   L.push("", "## Limitations");
-  for (const l of autoLimitations()) L.push(`- ${l}`);
+  for (const l of autoLimitations(brief)) L.push(`- ${l}`);
   if (brief.limitations.trim()) L.push(`- ${esc(brief.limitations.trim())}`);
   if (brief.receipt) {
     const r = brief.receipt;

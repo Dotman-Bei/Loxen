@@ -7,7 +7,7 @@ import { DigestTool } from "@/components/home/DigestTool";
 import { FaqCards } from "@/components/home/FaqCards";
 import { StartDialog } from "@/components/home/StartDialog";
 import { StatusMark } from "@/components/StatusMark";
-import { COVERAGE, COVERAGE_LABEL } from "@/lib/providers";
+import { coverage } from "@/lib/providers";
 
 const STAGES = [
   { name: "Frame the question", time: "About a minute", share: 8, text: "First, name the asset, the horizon and the one lens you read it through." },
@@ -213,21 +213,21 @@ export default function Home() {
           <Scallop edge="bottom" />
           <h2 id="coverage-title" className="sheet-title">Source coverage</h2>
           <p className="sheet-note">What this build can read for you today, and what you enter by hand.</p>
-          {COVERAGE.map((g) => (
+          {coverage().map((g) => (
             <div key={g.lens} className="sheet-group">
               <h3>{g.title}</h3>
               <ul>
                 {g.rows.map((r) => (
                   <li key={r.metric}>
                     <span>{r.metric}</span>
-                    <span className={`sheet-state s-${r.state}`}>{COVERAGE_LABEL[r.state]}</span>
+                    <span className={`sheet-state s-${r.state}`}>{r.label}</span>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
           <p className="sheet-foot">
-            Nothing on this sheet is a live feed until it says Live.
+            Live rows fill in when you give a BOT Chain contract address. The rest you enter by hand.
             <br />
             A provider is added only after its terms, limits and attribution are checked.
           </p>

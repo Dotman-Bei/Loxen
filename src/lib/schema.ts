@@ -73,6 +73,9 @@ export type Evidence = {
   sourceTimestamp: string; // ISO or ""
   status: SourceStatus;
   errorCode?: string;
+  /** Set on provider records: the asset and chain the value was read for. */
+  assetId?: string;
+  chainId?: number;
 };
 
 export type RuleType = "threshold" | "qualitative";
@@ -89,7 +92,9 @@ export type Brief = {
   id: string;
   schema: typeof SCHEMA_ID;
   question: string;
-  asset: { query: string; network: Network; contract: string };
+  asset: { query: string; network: Network; contract: string; name?: string; symbol?: string };
+  /** Provider failures from the last fetch, so missing values can say why they are missing. */
+  providerErrors?: { providerId: string; message: string; at: string }[];
   horizon: Horizon;
   lens: Lens;
   evidence: Evidence[];

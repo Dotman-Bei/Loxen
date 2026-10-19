@@ -2,6 +2,7 @@
 // brief's own entries, so the same brief always gives the same result.
 
 import { getAddress } from "viem";
+import { liveProvidersFor, providerLabel } from "./providers";
 import {
   ADDRESS_RE,
   BRIEF_PARTS,
@@ -57,13 +58,18 @@ function ageLabel(ms: number) {
   return `${Math.round(h / 24)} days old`;
 }
 
-/** Applies the stale threshold for the horizon and flags material disagreements. */
+/** A provider value counts as live for this long after it was read; after that it is shown as cached. */
+export const LIVE_WINDOW_MS = 10 * 60_000;
+
+/** Applies the live window and the horizon's stale threshold, and flags material disagreements. */
 export function evaluateEvidence(brief: Brief, now = Date.now()): EvaluatedEvidence[] {
   const limit = horizonOf(brief.horizon).staleAfterMs;
   const rows: EvaluatedEvidence[] = brief.evidence.map((e) => {
     const observed = Date.parse(e.sourceTimestamp || e.collectedAt);
     const ms = Number.isFinite(observed) ? now - observed : 0;
     let effective: SourceStatus = e.status;
+    const sinceRead = now - Date.parse(e.collectedAt);
+    if (effective === "live" && Number.isFinite(sinceRead) && sinceRead > LIVE_WINDOW_MS) effective = "cached";
     if (e.status !== "unavailable" && e.kind === "source" && ms > limit) effective = "stale";
     return { ...e, effective, age: Number.isFinite(observed) ? ageLabel(Math.max(0, ms)) : undefined };
   });
@@ -99,9 +105,19 @@ export function missingMetrics(brief: Brief): MissingMetric[] {
   const have = new Set(
     brief.evidence.filter((e) => e.status !== "unavailable").map((e) => e.metricName.trim().toLowerCase()),
   );
+  const fetched = brief.evidence.some((e) => e.providerId !== "user") || (brief.providerErrors?.length ?? 0) > 0;
   return LENS_METRICS[brief.lens]
     .filter((m) => !have.has(m.toLowerCase()))
-    .map((m) => ({ metric: m, reason: "No provider configured in this build, and no value entered" }));
+    .map((m) => ({ metric: m, reason: missingReason(brief, m, fetched) }));
+}
+
+function missingReason(brief: Brief, metric: string, fetched: boolean): string {
+  const providers = liveProvidersFor(metric);
+  if (!providers.length) return "No provider covers it in this build, and no value was entered";
+  const failure = brief.providerErrors?.find((e) => providers.includes(e.providerId));
+  if (failure) return `${providerLabel(failure.providerId)} did not answer: ${failure.message}`;
+  if (!fetched) return `Not fetched yet. Use Fetch evidence (${providers.map(providerLabel).join(", ")}), or enter it by hand`;
+  return `${providers.map(providerLabel).join(", ")} reported no value for this asset`;
 }
 
 export type RuleCheck = { rule: Rule; evaluable: boolean; missing: string[] };
@@ -129,12 +145,23 @@ export function autoUnknowns(brief: Brief, evaluated = evaluateEvidence(brief)):
   return [...new Set(out)];
 }
 
-export function autoLimitations(): string[] {
-  return [
-    "Generated from user-provided inputs and local template logic. No live sources were queried.",
-    "No model-generated text is included.",
-    "Values marked User supplied were entered by hand and are only as good as their stated source.",
-  ];
+/** Which kinds of source this brief was built from, in one sentence. */
+export function sourceMode(brief: Brief): string {
+  const providers = [...new Set(brief.evidence.filter((e) => e.providerId !== "user").map((e) => providerLabel(e.providerId)))];
+  const hasUser = brief.evidence.some((e) => e.providerId === "user");
+  if (!providers.length) return "Generated from user-provided inputs and local template logic. No live sources were queried.";
+  return `Generated from configured sources (${providers.join(", ")})${hasUser ? ", user-provided inputs" : ""} and local template logic.`;
+}
+
+export function autoLimitations(brief: Brief): string[] {
+  const out = [sourceMode(brief), "No model-generated text is included."];
+  if (brief.evidence.some((e) => e.providerId === "user")) {
+    out.push("Values marked User supplied were entered by hand and are only as good as their stated source.");
+  }
+  if (brief.evidence.some((e) => e.providerId !== "user")) {
+    out.push("Provider values are as reported at their read time. Loxen labels them but does not audit them.");
+  }
+  return out;
 }
 
 export function partsFilled(brief: Brief): Record<BriefPart, boolean> {
