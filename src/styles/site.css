@@ -1419,7 +1419,22 @@ html.js-reveal [data-reveal].is-in {
   }
   .tile-ui {
     top: 12px;
+    left: 14px;
+    right: 14px;
+    align-items: flex-start;
     font-size: 28px;
+    white-space: normal;
+  }
+  .tile-ui .status {
+    flex-wrap: wrap;
+  }
+  .t-kinds {
+    grid-row: auto / span 3;
+  }
+  .kinds-ui {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2px 14px;
   }
   .t-unavailable .tile-ui {
     font-size: 40px;
