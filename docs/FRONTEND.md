@@ -221,17 +221,12 @@ this build.
 
 - Sheet title: **Source coverage**
 - Note: What this build can read for you today, and what you enter by hand.
-- Groups and rows (status at the right; values come from `src/lib/providers.ts`):
-  - Market structure: Spot price, Manual entry · Price range over the horizon, Manual entry · Order
-    book depth, Planned
-  - Liquidity: Pool liquidity, Manual entry · 24-hour volume, Manual entry · Slippage at your size,
-    Calculated from your entries
-  - On-chain activity: Holder count, Manual entry · Transfers in the horizon, Manual entry · Contract
-    verification on BOTScan, Manual entry · Large transfers, Planned
-  - Risk and invalidation: Rule templates per lens, Available · Rule evaluation, Available when its
-    data is present · Model summary, Off
-- Sheet foot (two lines): Nothing on this sheet is a live feed until it says Live. / A provider is
-  added only after its terms, limits and attribution are checked.
+- Groups and rows: computed by `coverage()` in `src/lib/providers.ts` from the enabled providers, so the
+  sheet can never claim a live source that is switched off. With the default providers, On-chain
+  activity shows Contract verification, Holder count, Total supply and Total transfers as Live
+  (BOTScan, BOT Chain RPC); prices, liquidity and volume stay Manual entry.
+- Sheet foot (two lines): Live rows fill in when you give a BOT Chain contract address. The rest you
+  enter by hand. / A provider is added only after its terms, limits and attribution are checked.
 - Picture caption: Daumier, "Croquis parisiens", 1865: "Look at the stock prices… are our shares
   going up?" "At the moment only the barometer is."
 
