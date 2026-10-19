@@ -87,3 +87,106 @@ export async function commitDigest(
     return { kind: "reverted", reason: err.shortMessage ?? "The registry rejected this call in simulation." };
   }
 }
+
+// ---------- Reads (bounded; never synthesised) ----------
+
+export type ReceiptRow = {
+  receiptId: string;
+  owner: `0x${string}`;
+  digest: `0x${string}`;
+  schemaVersion: number;
+  timestamp: number; // unix seconds
+  blockNumber: bigint | null;
+  txHash: Hash | null;
+};
+
+export type ReadResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; reason: "not-configured" | "rpc"; message: string };
+
+const LOOKBACK_BLOCKS = BigInt(50_000);
+const RECEIPT_EVENT = REGISTRY_ABI.find((x) => x.type === "event" && x.name === "ReceiptRegistered")!;
+
+function rpcFailure(e: unknown): ReadResult<never> {
+  const msg = (e as { shortMessage?: string }).shortMessage ?? "";
+  return {
+    ok: false,
+    reason: "rpc",
+    message: /timed? ?out/i.test(msg) ? "The RPC did not answer after 8 s." : "The RPC returned an error.",
+  };
+}
+
+const notConfigured: ReadResult<never> = {
+  ok: false,
+  reason: "not-configured",
+  message: "The registry address is not set for this deployment, so no events can be read.",
+};
+
+async function logs(owner?: `0x${string}`): Promise<ReceiptRow[]> {
+  const latest = await publicClient.getBlockNumber();
+  const fromBlock = latest > LOOKBACK_BLOCKS ? latest - LOOKBACK_BLOCKS : BigInt(0);
+  const found = await publicClient.getLogs({
+    address: REGISTRY_ADDRESS!,
+    event: RECEIPT_EVENT as Extract<(typeof REGISTRY_ABI)[number], { type: "event" }>,
+    args: owner ? { owner } : undefined,
+    fromBlock,
+    toBlock: latest,
+  });
+  return found
+    .map((l) => {
+      const a = (l as unknown as { args: { receiptId: bigint; owner: `0x${string}`; digest: `0x${string}`; schemaVersion: number; timestamp: bigint } }).args;
+      return {
+        receiptId: a.receiptId.toString(),
+        owner: a.owner,
+        digest: a.digest,
+        schemaVersion: Number(a.schemaVersion),
+        timestamp: Number(a.timestamp),
+        blockNumber: l.blockNumber,
+        txHash: l.transactionHash,
+      };
+    })
+    .reverse();
+}
+
+export async function recentReceipts(limit = 20): Promise<ReadResult<ReceiptRow[]>> {
+  if (!REGISTRY_ADDRESS) return notConfigured;
+  try {
+    return { ok: true, data: (await logs()).slice(0, limit) };
+  } catch (e) {
+    return rpcFailure(e);
+  }
+}
+
+export async function receiptsByOwner(owner: `0x${string}`): Promise<ReadResult<{ count: number; rows: ReceiptRow[] }>> {
+  if (!REGISTRY_ADDRESS) return notConfigured;
+  try {
+    const [count, rows] = await Promise.all([
+      publicClient.readContract({ address: REGISTRY_ADDRESS, abi: REGISTRY_ABI, functionName: "receiptCount", args: [owner] }),
+      logs(owner),
+    ]);
+    return { ok: true, data: { count: Number(count), rows } };
+  } catch (e) {
+    return rpcFailure(e);
+  }
+}
+
+export async function receiptById(id: bigint): Promise<ReadResult<ReceiptRow | null>> {
+  if (!REGISTRY_ADDRESS) return notConfigured;
+  try {
+    const [owner, digest, schemaVersion, timestamp] = await publicClient.readContract({
+      address: REGISTRY_ADDRESS,
+      abi: REGISTRY_ABI,
+      functionName: "getReceipt",
+      args: [id],
+    });
+    if (/^0x0{40}$/i.test(owner)) return { ok: true, data: null };
+    return {
+      ok: true,
+      data: { receiptId: id.toString(), owner, digest, schemaVersion: Number(schemaVersion), timestamp: Number(timestamp), blockNumber: null, txHash: null },
+    };
+  } catch (e) {
+    const msg = (e as { shortMessage?: string }).shortMessage ?? "";
+    if (/revert/i.test(msg)) return { ok: true, data: null };
+    return rpcFailure(e);
+  }
+}
