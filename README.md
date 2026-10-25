@@ -17,8 +17,8 @@ true.
 | Stale, conflict and rule checks | Working |
 | Live evidence: BOTScan and BOT Chain RPC (contract verification, holders, transfers, total supply) | Working, for BOT Chain contract addresses |
 | Prices, pool liquidity, volume | Not live: entered by hand. No DEX source has been verified yet |
-| `ResearchReceiptRegistry` | Deployed and verified on BOT Chain testnet at [`0x597Ea5d6…3EDe95`](https://scan.bohr.life/address/0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95). Mainnet: not deployed |
-| Receipt commit, history search, profile, package verification | Working on testnet |
+| `ResearchReceiptRegistry` | Deployed and verified on BOT Chain mainnet at [`0x4e76FeE7…941298`](https://scan.botchain.ai/address/0x4e76FeE73692367C8ba85B33f6F3E0d345941298) and testnet at [`0x597Ea5d6…3EDe95`](https://scan.bohr.life/address/0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95) |
+| Receipt commit, history search, profile, package verification | Working on testnet; mainnet once the site is switched to it |
 | Model-generated summaries | Off |
 | Public API for agents | Not built (later phase) |
 

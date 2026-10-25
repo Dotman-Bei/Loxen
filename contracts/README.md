@@ -8,9 +8,9 @@ research brief at a block. It is optional. Everything else in Loxen works withou
 | Network | Address | Deployed | Source |
 | --- | --- | --- | --- |
 | BOT Chain testnet (968) | [`0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95`](https://scan.bohr.life/address/0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95) | 19 Oct 2026, block 27,422,320, [tx `0x417a…6975`](https://scan.bohr.life/tx/0x417a6a457652caad89926e36ef24c42c0f19befc8ba1f034ac37901425ad6975), 841,034 gas | Verified on BOTScan |
-| BOT Chain mainnet (677) | Not deployed | | |
+| BOT Chain mainnet (677) | [`0x4e76FeE73692367C8ba85B33f6F3E0d345941298`](https://scan.botchain.ai/address/0x4e76FeE73692367C8ba85B33f6F3E0d345941298) | 25 Oct 2026, block 27,948,210, [tx `0x2ff6…4f1b`](https://scan.botchain.ai/tx/0x2ff6908652cb8fd184db1de9eea719c8fe567a43c7943ca674019a0446fa4f1b), 841,034 gas | Verified on BOTScan |
 
-Pause admin on testnet: `0x0f30fF72C0934919D892Fb4BCe8b261F4B1A0B9E`.
+Pause admin on testnet and mainnet: `0x0f30fF72C0934919D892Fb4BCe8b261F4B1A0B9E` (a single wallet, not yet a multisig).
 
 ## What it proves, and what it does not
 

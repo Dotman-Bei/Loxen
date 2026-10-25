@@ -51,7 +51,8 @@ wallet interaction, as built on 19 October 2026. Contract-specific detail is in
 
 ## Not covered yet
 
-- No external audit of the contract. Required before mainnet.
+- No external audit of the contract. It was deployed to mainnet on 25 Oct 2026 after 21 tests, a 512-run fuzz test and a clean Slither run, at the owner's decision; an audit is still recommended.
+- The mainnet pause admin is a single wallet whose key has also been kept in a plaintext file for testnet. Moving ownership to a hardware wallet or multisig (`transferOwnership`, then `acceptOwnership`) is recommended.
 - No shared rate-limit store for multi-instance hosting.
 - No content-security policy headers are configured yet.
 - Legal review of Privacy and Terms.
