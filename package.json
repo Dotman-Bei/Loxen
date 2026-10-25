@@ -10,7 +10,8 @@
     "check:abi": "node scripts/check-abi.mjs",
     "deploy:testnet": "bash contracts/deploy-testnet.sh",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "deploy:mainnet": "bash contracts/deploy-mainnet.sh"
   },
   "dependencies": {
     "lucide-react": "^1.59.0",

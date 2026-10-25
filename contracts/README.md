@@ -104,10 +104,12 @@ Measured gas: `registerReceipt` about 160,000 for a wallet's first receipt; depl
    at the project root. It checks the chain is 968 and the wallet is funded, runs the tests, deploys,
    verifies on BOTScan (Blockscout API at `https://scan.bohr.life/api/`) and writes the address into
    `.env.local`. It never prints the key. Restart the dev server afterwards.
-3. **Mainnet:** do not put a mainnet key in a file. Use an encrypted keystore
-   (`cast wallet import loxen-deployer --interactive`) and a multisig or hardware wallet as
-   `REGISTRY_OWNER`, then
-   `forge script script/Deploy.s.sol --rpc-url bot_mainnet --account loxen-deployer --broadcast`.
+3. **Mainnet:** never put a mainnet key in a file. Import it once into Foundry's encrypted keystore
+   (`cast wallet import loxen-mainnet --interactive`), then run `npm run deploy:mainnet` yourself, in
+   your own terminal. It checks the chain is 677 and the wallet holds at least 0.03 BOT, asks for the
+   pause-admin address (a hardware wallet or Safe multisig is recommended), runs the tests, and sends
+   nothing until you type `deploy to mainnet`. It verifies the source on BOTScan and prints the two
+   Vercel variables to set. Slither (102 detectors) reported no findings on 25 Oct 2026.
 4. Libraries are not committed; the deploy script installs them, or run
    `forge install foundry-rs/forge-std OpenZeppelin/openzeppelin-contracts@v5.1.0 --no-git`.
 
