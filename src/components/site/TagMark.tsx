@@ -1,15 +1,15 @@
-/** The Loxen mark: an evidence tag with its punched hole. */
+/** The Loxen mark: an evidence tag, with its punched hole, cut into an L. Same path as public/brand/. */
 export function TagMark({ size = 20, className }: { size?: number; className?: string }) {
   return (
     <svg
       width={size}
-      height={Math.round(size * 1.3)}
-      viewBox="0 0 20 26"
+      height={Math.round((size * 28) / 22)}
+      viewBox="0 0 22 28"
       aria-hidden="true"
       className={className}
       fill="currentColor"
     >
-      <path fillRule="evenodd" d="M4 0h12l4 4v22H0V4L4 0Zm6 3.2a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6Z" />
+      <path fillRule="evenodd" d="M0 3 3 0h5l3 3v16h11v9H0Z M5.5 4.1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" />
     </svg>
   );
 }

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+<style>@import url("https://api.fontshare.com/v2/css?f[]=general-sans@500,700&display=swap");@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap");text{font-family:"General Sans",sans-serif}.m{font-family:"JetBrains Mono",monospace;font-size:22px}</style>
+<rect width="1600" height="900" fill="#133621"/>
+<rect x="40" y="0" width="1520" height="900" fill="#1a4429"/>
+<g fill="#f4d96c"><rect x="0" width="28" height="56"/><rect x="56" width="28" height="56"/><rect x="112" width="28" height="56"/><rect x="168" width="28" height="56"/><rect x="224" width="28" height="56"/><rect x="280" width="28" height="56"/><rect x="336" width="28" height="56"/><rect x="392" width="28" height="56"/><rect x="448" width="28" height="56"/><rect x="504" width="28" height="56"/><rect x="560" width="28" height="56"/><rect x="616" width="28" height="56"/><rect x="672" width="28" height="56"/><rect x="728" width="28" height="56"/><rect x="784" width="28" height="56"/><rect x="840" width="28" height="56"/><rect x="896" width="28" height="56"/><rect x="952" width="28" height="56"/><rect x="1008" width="28" height="56"/><rect x="1064" width="28" height="56"/><rect x="1120" width="28" height="56"/><rect x="1176" width="28" height="56"/><rect x="1232" width="28" height="56"/><rect x="1288" width="28" height="56"/><rect x="1344" width="28" height="56"/><rect x="1400" width="28" height="56"/><rect x="1456" width="28" height="56"/><rect x="1512" width="28" height="56"/><rect x="1568" width="28" height="56"/></g>
+<path fill="#f4d96c" d="M1140 150H1420L1500 230V910H1060V230Z"/>
+<circle cx="1280" cy="206" r="26" fill="#1a4429"/>
+<text x="1108" y="330" fill="#133621" font-size="24" font-weight="700" letter-spacing="3">RESEARCH RECEIPT</text>
+<line x1="1108" x2="1452" y1="356" y2="356" stroke="#133621" stroke-width="2"/>
+<text class="m" x="1108" y="400" fill="#4a5a3f">Network</text><text class="m" x="1108" y="428" fill="#133621">BOT Chain mainnet</text><text class="m" x="1108" y="462" fill="#4a5a3f">Chain ID</text><text class="m" x="1108" y="490" fill="#133621">677</text><text class="m" x="1108" y="524" fill="#4a5a3f">Block</text><text class="m" x="1108" y="552" fill="#133621">27,948,210</text><text class="m" x="1108" y="586" fill="#4a5a3f">Contract</text><text class="m" x="1108" y="614" fill="#133621">0x4e76…941298</text><text class="m" x="1108" y="648" fill="#4a5a3f">Source</text><text class="m" x="1108" y="676" fill="#133621">Verified, BOTScan</text><text class="m" x="1108" y="710" fill="#4a5a3f">Digest</text><text class="m" x="1108" y="738" fill="#133621">keccak256</text>
+<path fill="#f4d96c" fill-rule="evenodd" transform="translate(100 140) scale(1.4286)" d="M0 3 3 0h5l3 3v16h11v9H0Z M5.5 4.1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/>
+<text x="146" y="174" fill="#f4d96c" font-size="34" font-weight="700" letter-spacing="-0.5">Loxen</text>
+<text x="102" y="350" fill="#c9bb73" font-size="26" font-weight="500" letter-spacing="3">MAINNET DEPLOYMENT</text>
+<text x="96" y="460" fill="#f4d96c" font-size="96" font-weight="700" letter-spacing="-3">Live on</text>
+<text x="96" y="560" fill="#f4d96c" font-size="96" font-weight="700" letter-spacing="-3">BOT Chain</text>
+<text x="100" y="660" fill="#c9bb73" font-size="30" font-weight="500">A salted digest of a research brief,</text>
+<text x="100" y="702" fill="#c9bb73" font-size="30" font-weight="500">recorded on-chain as a public receipt.</text>
+</svg>
