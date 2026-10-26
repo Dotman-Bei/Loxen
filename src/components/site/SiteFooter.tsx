@@ -44,7 +44,7 @@ export function SiteFooter() {
         <div>
           <h3>BOT Chain</h3>
           <ul>
-            <li><a className="link" href={BOT_WEBSITE} rel="noopener">Official website</a></li>
+            <li><a className="link" href={BOT_WEBSITE} rel="noopener">BOT Chain official website</a></li>
             <li><a className="link" href={BOT_MAINNET.explorer} rel="noopener">BOT Chain Explorer</a></li>
             <li><a className="link" href="https://dev-docs.botchain.ai/docs/Developers/quick-guide/" rel="noopener">Developer docs</a></li>
           </ul>

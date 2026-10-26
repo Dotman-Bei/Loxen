@@ -45,7 +45,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {children}
         <footer className="app-footer">
           <span>Built on BOT Chain</span>
-          <a className="link" href={BOT_WEBSITE} rel="noopener">Official website</a>
+          <a className="link" href={BOT_WEBSITE} rel="noopener">BOT Chain official website</a>
           <a className="link" href={BOT_MAINNET.explorer} rel="noopener">BOT Chain Explorer</a>
         </footer>
       </main>
