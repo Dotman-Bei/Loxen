@@ -29,7 +29,7 @@ export type DigestInput = {
   chainId?: number;
 };
 
-export function digestOf({ brief, salt, owner = ZERO_ADDRESS, chainId = 968 }: DigestInput): `0x${string}` {
+export function digestOf({ brief, salt, owner = ZERO_ADDRESS, chainId = 677 }: DigestInput): `0x${string}` {
   const envelope = {
     domain: "loxen.research-receipt",
     schema: SCHEMA_ID,

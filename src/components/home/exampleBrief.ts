@@ -14,7 +14,7 @@ export type ExampleRule = { text: string; verdict: "holds" | "past" | "cannot"; 
 export const EXAMPLE = {
   question: "What would make this pool too thin for a two-week view?",
   asset: "Example token",
-  network: "BOT Chain testnet · 968",
+  network: "BOT Chain mainnet · 677",
   contract: "0x7a3f…c2e1",
   horizon: "1–4 weeks",
 };

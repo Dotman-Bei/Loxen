@@ -130,6 +130,16 @@
   min-width: 0;
   padding: 28px 24px 64px;
 }
+.app-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
 .title-row {
   display: flex;
   align-items: flex-start;

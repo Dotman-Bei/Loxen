@@ -6,7 +6,7 @@ const brief: Brief = {
   id: "b_x",
   schema: SCHEMA_ID,
   question: "Is the pool | deep * enough?",
-  asset: { query: "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed", network: "bohr", contract: "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed" },
+  asset: { query: "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed", network: "botchain", contract: "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed" },
   horizon: "weeks",
   lens: "liquidity",
   evidence: [

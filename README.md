@@ -17,8 +17,8 @@ true.
 | Stale, conflict and rule checks | Working |
 | Live evidence: BOTScan and BOT Chain RPC (contract verification, holders, transfers, total supply) | Working, for BOT Chain contract addresses |
 | Prices, pool liquidity, volume | Not live: entered by hand. No DEX source has been verified yet |
-| `ResearchReceiptRegistry` | Deployed and verified on BOT Chain mainnet at [`0x4e76FeE7…941298`](https://scan.botchain.ai/address/0x4e76FeE73692367C8ba85B33f6F3E0d345941298) and testnet at [`0x597Ea5d6…3EDe95`](https://scan.bohr.life/address/0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95) |
-| Receipt commit, history search, profile, package verification | Working on testnet; mainnet once the site is switched to it |
+| `ResearchReceiptRegistry` | Deployed and verified on BOT Chain mainnet at [`0x4e76FeE7…941298`](https://scan.botchain.ai/address/0x4e76FeE73692367C8ba85B33f6F3E0d345941298) |
+| Receipt commit, history search, profile, package verification | Working on BOT Chain mainnet |
 | Model-generated summaries | Off |
 | Public API for agents | Not built (later phase) |
 
@@ -75,21 +75,20 @@ Requirements: Node 22+, and Foundry for the contract.
 
 ```
 npm install
-cp .env.example .env.local     # then set NEXT_PUBLIC_LOXEN_REGISTRY_ADDRESS (testnet address above)
+cp .env.example .env.local     # then set NEXT_PUBLIC_LOXEN_REGISTRY_ADDRESS (mainnet address above)
 npm run dev                    # http://localhost:3000
 ```
 
 | Variable | Meaning |
 | --- | --- |
-| `NEXT_PUBLIC_LOXEN_CHAIN` | `testnet` (968, default), `mainnet` (677) or `local` (Anvil, 31337) |
+| `NEXT_PUBLIC_LOXEN_CHAIN` | `mainnet` (677, default) or `local` (Anvil, 31337, development only) |
 | `NEXT_PUBLIC_LOXEN_REGISTRY_ADDRESS` | Registry address. Empty: commit, history and profile say receipts cannot be committed or read |
 | `NEXT_PUBLIC_LOXEN_PROVIDERS` | Enabled providers, default `botscan,botchain-rpc` |
 | `NEXT_DIST_DIR` | Build folder, so a second server (tests) can run beside `npm run dev` |
 
 Network values were checked against the
 [BOT Chain developer guide](https://dev-docs.botchain.ai/docs/Developers/quick-guide/) on 19 October
-2026 (testnet: chain 968, `https://rpc.bohr.life`, `https://scan.bohr.life`; mainnet: chain 677,
-`https://rpc.botchain.ai`, `https://scan.botchain.ai`). Re-check them before any deployment.
+2026 (mainnet: chain 677, `https://rpc.botchain.ai`, `https://scan.botchain.ai`). Re-check them before any deployment.
 
 ## Tests
 
@@ -111,15 +110,14 @@ End-to-end tests run the main flow in a real browser with provider calls stubbed
 add evidence and a rule, save, reopen, export Markdown and JSON and check their contents; delete with
 confirmation; the not-found brief; the registry's blocked state; and the public page titles.
 
-The commit path was also exercised against a real chain (local Anvil, and reads against the live
-testnet registry): confirmed commit, paused registry and wallet rejection, each showing success only
+The commit path was also exercised against a real chain (local Anvil, and reads against a live
+BOT Chain registry): confirmed commit, paused registry and wallet rejection, each showing success only
 after a confirmed transaction.
 
 ## Deploying
 
-- **Contract (testnet):** put a funded testnet-only key in `contracts/.env` and run
-  `npm run deploy:testnet`. Details and the mainnet procedure (encrypted keystore, multisig admin) are
-  in [contracts/README.md](contracts/README.md).
+- **Contract (mainnet):** `npm run deploy:mainnet`, from an encrypted keystore. The procedure
+  (keystore, pause-admin choice, typed confirmation) is in [contracts/README.md](contracts/README.md).
 - **Web app:** any Next.js host. Set the variables above. The rate limiter and cache are per server
   process; on a multi-instance or serverless host they are best-effort, and a shared store (for example
   Redis) should replace them before heavy public use.

@@ -23,7 +23,7 @@ export default defineConfig({
     reuseExistingServer: false,
     env: {
       NEXT_DIST_DIR: ".next-e2e",
-      NEXT_PUBLIC_LOXEN_CHAIN: "testnet",
+      NEXT_PUBLIC_LOXEN_CHAIN: "mainnet",
       NEXT_PUBLIC_LOXEN_REGISTRY_ADDRESS: "",
     },
   },

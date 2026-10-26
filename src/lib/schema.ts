@@ -51,11 +51,10 @@ export const LENSES: { id: Lens; label: string }[] = [
 /** Two sources disagree "materially" past these relative differences. */
 export const CONFLICT_THRESHOLD = { price: 0.02, quantity: 0.1 };
 
-export type Network = "botchain" | "bohr" | "evm" | "none";
+export type Network = "botchain" | "evm" | "none";
 
 export const NETWORKS: { id: Network; label: string; chainId?: number }[] = [
   { id: "botchain", label: "BOT Chain mainnet", chainId: 677 },
-  { id: "bohr", label: "BOT Chain testnet", chainId: 968 },
   { id: "evm", label: "Another EVM chain" },
   { id: "none", label: "Not on a chain" },
 ];
@@ -169,8 +168,9 @@ export function horizonOf(id: Horizon) {
 export function lensOf(id: Lens) {
   return LENSES.find((l) => l.id === id)!;
 }
+/** Briefs saved before testnet support was removed may still say "bohr"; they show as another EVM chain. */
 export function networkOf(id: Network) {
-  return NETWORKS.find((n) => n.id === id)!;
+  return NETWORKS.find((n) => n.id === id) ?? NETWORKS.find((n) => n.id === "evm")!;
 }
 
 export const ADDRESS_RE = /^0x[0-9a-fA-F]{40}$/;

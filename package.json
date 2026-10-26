@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "eslint",
     "check:abi": "node scripts/check-abi.mjs",
-    "deploy:testnet": "bash contracts/deploy-testnet.sh",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "deploy:mainnet": "bash contracts/deploy-mainnet.sh"

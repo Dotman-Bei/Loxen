@@ -3,7 +3,7 @@
 
 import type { Evidence } from "@/lib/schema";
 
-export type ProviderNetwork = "botchain" | "bohr";
+export type ProviderNetwork = "botchain";
 
 export type ResolvedAsset = {
   address: string;
@@ -33,7 +33,6 @@ export type Adapter = (address: `0x${string}`, network: ProviderNetwork, deps: A
 
 export const NETWORK_INFO: Record<ProviderNetwork, { chainId: number; rpc: string; explorer: string }> = {
   botchain: { chainId: 677, rpc: "https://rpc.botchain.ai", explorer: "https://scan.botchain.ai" },
-  bohr: { chainId: 968, rpc: "https://rpc.bohr.life", explorer: "https://scan.bohr.life" },
 };
 
 export function adapterError(e: unknown): AdapterError {

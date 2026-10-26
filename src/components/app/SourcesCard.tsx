@@ -35,12 +35,12 @@ export function SourcesCard({ brief, update }: { brief: Brief; update: (p: Parti
   }, []);
 
   const asset = checkAsset(brief.asset.query);
-  const onBot = brief.asset.network === "botchain" || brief.asset.network === "bohr";
+  const onBot = brief.asset.network === "botchain";
   const blocker =
     asset.kind !== "address" || !asset.ok
       ? "Enter a valid contract address to read live data."
       : !onBot
-        ? "Live providers cover BOT Chain only. Choose BOT Chain mainnet or testnet, or enter values by hand."
+        ? "Live providers cover BOT Chain only. Choose BOT Chain mainnet, or enter values by hand."
         : null;
 
   const fetchEvidence = async () => {

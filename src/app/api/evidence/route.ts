@@ -7,13 +7,13 @@ import { createLimiter } from "@/server/rateLimit";
 export const dynamic = "force-dynamic";
 
 const limiter = createLimiter(20, 60_000); // 20 lookups per minute per client
-const NETWORKS: ProviderNetwork[] = ["botchain", "bohr"];
+const NETWORKS: ProviderNetwork[] = ["botchain"];
 
 function clientKey(req: NextRequest) {
   return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "local";
 }
 
-/** GET /api/evidence?address=0x…&network=bohr — provider records for one contract on BOT Chain. */
+/** GET /api/evidence?address=0x…&network=botchain — provider records for one contract on BOT Chain mainnet. */
 export async function GET(req: NextRequest) {
   const address = req.nextUrl.searchParams.get("address") ?? "";
   const network = req.nextUrl.searchParams.get("network") ?? "";
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "address must be 0x followed by 40 hexadecimal characters" }, { status: 400 });
   }
   if (!NETWORKS.includes(network as ProviderNetwork)) {
-    return NextResponse.json({ error: "network must be botchain (677) or bohr (968)" }, { status: 400 });
+    return NextResponse.json({ error: "network must be botchain (677)" }, { status: 400 });
   }
   const gate = limiter(clientKey(req));
   if (!gate.ok) {

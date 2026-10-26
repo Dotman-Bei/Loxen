@@ -7,10 +7,9 @@ research brief at a block. It is optional. Everything else in Loxen works withou
 
 | Network | Address | Deployed | Source |
 | --- | --- | --- | --- |
-| BOT Chain testnet (968) | [`0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95`](https://scan.bohr.life/address/0x597Ea5d69C2B859AcB0f98B700E9608dC93EDe95) | 19 Oct 2026, block 27,422,320, [tx `0x417a…6975`](https://scan.bohr.life/tx/0x417a6a457652caad89926e36ef24c42c0f19befc8ba1f034ac37901425ad6975), 841,034 gas | Verified on BOTScan |
 | BOT Chain mainnet (677) | [`0x4e76FeE73692367C8ba85B33f6F3E0d345941298`](https://scan.botchain.ai/address/0x4e76FeE73692367C8ba85B33f6F3E0d345941298) | 25 Oct 2026, block 27,948,210, [tx `0x2ff6…4f1b`](https://scan.botchain.ai/tx/0x2ff6908652cb8fd184db1de9eea719c8fe567a43c7943ca674019a0446fa4f1b), 841,034 gas | Verified on BOTScan |
 
-Pause admin on testnet and mainnet: `0x0f30fF72C0934919D892Fb4BCe8b261F4B1A0B9E` (a single wallet, not yet a multisig).
+Pause admin: `0x0f30fF72C0934919D892Fb4BCe8b261F4B1A0B9E` (a single wallet, not yet a multisig).
 
 ## What it proves, and what it does not
 
@@ -97,20 +96,15 @@ Measured gas: `registerReceipt` about 160,000 for a wallet's first receipt; depl
 ## Deploying
 
 1. Confirm the network values against the official guide:
-   https://dev-docs.botchain.ai/docs/Developers/quick-guide/ (as of this writing: testnet chain 968,
-   RPC `https://rpc.bohr.life`; mainnet chain 677, RPC `https://rpc.botchain.ai`).
-2. **Testnet, one command:** put a funded testnet-only key in `contracts/.env` (gitignored; faucet at
-   https://faucet.botchain.ai/basic), optionally `REGISTRY_OWNER`, then run `npm run deploy:testnet`
-   at the project root. It checks the chain is 968 and the wallet is funded, runs the tests, deploys,
-   verifies on BOTScan (Blockscout API at `https://scan.bohr.life/api/`) and writes the address into
-   `.env.local`. It never prints the key. Restart the dev server afterwards.
-3. **Mainnet:** never put a mainnet key in a file. Import it once into Foundry's encrypted keystore
+   https://dev-docs.botchain.ai/docs/Developers/quick-guide/ (as of this writing: mainnet chain 677,
+   RPC `https://rpc.botchain.ai`).
+2. **Mainnet:** never put a mainnet key in a file. Import it once into Foundry's encrypted keystore
    (`cast wallet import loxen-mainnet --interactive`), then run `npm run deploy:mainnet` yourself, in
    your own terminal. It checks the chain is 677 and the wallet holds at least 0.03 BOT, asks for the
    pause-admin address (a hardware wallet or Safe multisig is recommended), runs the tests, and sends
    nothing until you type `deploy to mainnet`. It verifies the source on BOTScan and prints the two
    Vercel variables to set. Slither (102 detectors) reported no findings on 25 Oct 2026.
-4. Libraries are not committed; the deploy script installs them, or run
+3. Libraries are not committed; the deploy script installs them, or run
    `forge install foundry-rs/forge-std OpenZeppelin/openzeppelin-contracts@v5.1.0 --no-git`.
 
 ## Local end-to-end run

@@ -49,7 +49,7 @@ function blankBrief(question = "", horizon: Horizon = "weeks"): Brief {
     id: newId("b"),
     schema: SCHEMA_ID,
     question,
-    asset: { query: "", network: "bohr", contract: "" },
+    asset: { query: "", network: "botchain", contract: "" },
     horizon,
     lens: "liquidity",
     evidence: [],

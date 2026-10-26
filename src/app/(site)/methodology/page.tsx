@@ -262,8 +262,8 @@ const sections = [
           <tr><td>Brief composer, local save, Markdown and JSON export</td><td>Working</td></tr>
           <tr><td>Stale, conflict and rule checks</td><td>Working, on your entries</td></tr>
           <tr><td>Receipt digest and package</td><td>Working, computed in your browser</td></tr>
-          <tr><td>Registry contract on BOT Chain</td><td>Deployed and verified on mainnet and testnet</td></tr>
-          <tr><td>Receipt history and profile reads</td><td>Working on testnet</td></tr>
+          <tr><td>Registry contract on BOT Chain</td><td>Deployed and verified on mainnet</td></tr>
+          <tr><td>Receipt history and profile reads</td><td>Working on mainnet</td></tr>
           <tr><td>BOTScan: contract verification, holders, transfers, total supply</td><td>Live, for BOT Chain contract addresses</td></tr>
           <tr><td>BOT Chain RPC: contract code, name, symbol, total supply at a block</td><td>Live, for BOT Chain contract addresses</td></tr>
           <tr><td>Prices, pool liquidity, volume (DEX pools)</td><td>Planned, after a venue’s terms and limits are checked. Enter them by hand meanwhile</td></tr>

@@ -9,15 +9,15 @@ async function stubProviders(page: Page) {
   await page.route("**/api/evidence**", (r) =>
     r.fulfill({
       json: {
-        network: "bohr",
+        network: "botchain",
         address: TOKEN,
-        asset: { address: TOKEN, isContract: true, name: "BOHR Wrapped ETH", symbol: "BOWETH", decimals: 18, standard: "ERC-20" },
+        asset: { address: TOKEN, isContract: true, name: "Wrapped ETH", symbol: "BOWETH", decimals: 18, standard: "ERC-20" },
         records: [
           {
             id: "s1",
             providerId: "botscan",
             sourceLabel: "BOTScan",
-            sourceUrl: `https://scan.bohr.life/token/${TOKEN}`,
+            sourceUrl: `https://scan.botchain.ai/token/${TOKEN}`,
             collectedAt: new Date().toISOString(),
             sourceTimestamp: "",
             kind: "source",
@@ -25,7 +25,7 @@ async function stubProviders(page: Page) {
             value: "29",
             unit: "holders",
             status: "live",
-            chainId: 968,
+            chainId: 677,
           },
         ],
         outcomes: [
@@ -51,7 +51,7 @@ test("compose, fetch, add evidence and a rule, save, reopen, export", async ({ p
 
   // live fetch (stubbed): one value, one provider outage that must show as such
   await page.getByRole("button", { name: "Fetch evidence" }).click();
-  await expect(page.getByText("Resolved as BOHR Wrapped ETH (BOWETH)")).toBeVisible();
+  await expect(page.getByText("Resolved as Wrapped ETH (BOWETH)")).toBeVisible();
   const evidence = page.locator("#card-evidence");
   await expect(evidence.getByText("29")).toBeVisible();
   await expect(page.locator("#card-sources").getByText("Did not answer in time.")).toBeVisible();

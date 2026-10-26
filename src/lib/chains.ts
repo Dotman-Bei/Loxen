@@ -2,6 +2,8 @@
 // https://dev-docs.botchain.ai/docs/Developers/quick-guide/
 // The registry address is configuration, never hardcoded.
 
+export const BOT_WEBSITE = "https://www.botchain.ai";
+
 export type ChainConfig = {
   id: number;
   name: string;
@@ -16,13 +18,6 @@ export const BOT_MAINNET: ChainConfig = {
   explorer: "https://scan.botchain.ai",
 };
 
-export const BOT_TESTNET: ChainConfig = {
-  id: 968,
-  name: "BOT Chain testnet",
-  rpcUrl: "https://rpc.bohr.life",
-  explorer: "https://scan.bohr.life",
-};
-
 /** A local Anvil node, for development and end-to-end tests only. */
 export const LOCAL_CHAIN: ChainConfig = {
   id: 31337,
@@ -32,7 +27,7 @@ export const LOCAL_CHAIN: ChainConfig = {
 };
 
 const CHAIN = process.env.NEXT_PUBLIC_LOXEN_CHAIN;
-export const TARGET_CHAIN: ChainConfig = CHAIN === "mainnet" ? BOT_MAINNET : CHAIN === "local" ? LOCAL_CHAIN : BOT_TESTNET;
+export const TARGET_CHAIN: ChainConfig = CHAIN === "local" ? LOCAL_CHAIN : BOT_MAINNET;
 
 const rawRegistry = process.env.NEXT_PUBLIC_LOXEN_REGISTRY_ADDRESS ?? "";
 export const REGISTRY_ADDRESS: `0x${string}` | null = /^0x[0-9a-fA-F]{40}$/.test(rawRegistry)
@@ -42,14 +37,12 @@ export const REGISTRY_ADDRESS: `0x${string}` | null = /^0x[0-9a-fA-F]{40}$/.test
 export function chainName(id: number | null | undefined) {
   if (id == null) return "No network";
   if (id === BOT_MAINNET.id) return BOT_MAINNET.name;
-  if (id === BOT_TESTNET.id) return BOT_TESTNET.name;
   if (id === LOCAL_CHAIN.id) return LOCAL_CHAIN.name;
   return `Chain ${id}`;
 }
 
 export function chainById(id: number | null | undefined): ChainConfig {
   if (id === BOT_MAINNET.id) return BOT_MAINNET;
-  if (id === BOT_TESTNET.id) return BOT_TESTNET;
   if (id === LOCAL_CHAIN.id) return LOCAL_CHAIN;
   return TARGET_CHAIN;
 }

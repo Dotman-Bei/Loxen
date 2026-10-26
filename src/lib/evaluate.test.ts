@@ -21,7 +21,7 @@ function brief(patch: Partial<Brief> = {}): Brief {
     id: "b_test",
     schema: SCHEMA_ID,
     question: "Is the pool deep enough?",
-    asset: { query: "", network: "bohr", contract: "" },
+    asset: { query: "", network: "botchain", contract: "" },
     horizon: "weeks",
     lens: "liquidity",
     evidence: [],

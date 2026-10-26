@@ -274,8 +274,8 @@ and sentence. Right: the "New brief" dialog as the product renders it.
 
 **Footer: the mark, built large.** The word LOXEN built from five gold tag-shaped blocks of
 different heights. Columns: Product (Workbench, Registry, History, Profile) · Method (Methodology,
-Privacy, Terms) · BOT Chain (Mainnet explorer, Testnet explorer, Developer docs) · Pictures (credit
-lines). Contact lines: BOT Chain mainnet, chain ID 677 / testnet, chain ID 968. Last row: © 2026
+Privacy, Terms) · BOT Chain (Official website, BOT Chain Explorer, Developer docs) · Pictures (credit
+lines). Contact line: BOT Chain mainnet, chain ID 677. Last row: © 2026
 Loxen. Research tool, not financial advice. · small button **Open the workbench**.
 
 ### 3.2 Workbench `/workbench`
@@ -298,7 +298,7 @@ it, an empty part shows a grey dash. Clicking a cell scrolls the composer to it.
 1. *Question.* Label "What are you trying to find out?" · helper "One question. You can change it
    later." 
 2. *Asset.* Label "Symbol, name or contract address" · network select (BOT Chain mainnet · 677,
-   BOT Chain testnet · 968, Another EVM chain, Not on a chain). Address validation inline:
+   Another EVM chain, Not on a chain). Address validation inline:
    "Looks like a contract address (42 characters, checksum valid)" or "This is not a valid
    address: 0x followed by 40 hexadecimal characters." A symbol with no configured provider reads:
    "No provider can resolve symbols in this build. Enter the contract address to be sure which asset
@@ -351,7 +351,7 @@ in the title row; Export moves into a kebab.
   notes in the digest. They stay private; only the digest changes." → Salt (mono, New salt).
 - Right: *Wallet and network.* Connected wallet, active network with chain ID, the expected
   network, contract address. States: "No wallet found in this browser", "Connect wallet", "Wrong
-  network: connected to chain 1, the registry is on BOT Chain testnet (968). Switch network",
+  network: connected to chain 1, the registry is on BOT Chain mainnet (677). Switch network",
   "Registry contract is not configured for this deployment. Receipts cannot be committed yet."
 - Transaction state, one line each with its mark: Ready to sign · Waiting for your wallet ·
   Submitted, waiting for confirmation · Confirmed at block N · Rejected in your wallet · Reverted ·
@@ -362,7 +362,7 @@ in the title row; Export moves into a kebab.
 
 - h1: Receipt history. Subline: "Public receipts recorded on BOT Chain by the Loxen registry."
 - Search (one field): "Wallet address or receipt ID". Result states: "No receipt found for 0x12…ab
-  on BOT Chain testnet." (a real empty answer) versus "Couldn't read the registry: RPC did not answer
+  on BOT Chain mainnet." (a real empty answer) versus "Couldn't read the registry: RPC did not answer
   after 8 s. This is not the same as no receipts. Retry".
 - Recent receipts table: Receipt ID · Owner · Digest · Schema · Block · Time · Transaction (BOTScan
   link). Capped at 20 with "Load older".

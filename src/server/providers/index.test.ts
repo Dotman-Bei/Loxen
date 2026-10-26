@@ -42,7 +42,7 @@ describe("provider orchestration", () => {
 
   it("collects records from both providers and resolves the asset", async () => {
     const w = world();
-    const r = await fetchEvidence(ADDR, "bohr", { fetch: w.f, now });
+    const r = await fetchEvidence(ADDR, "botchain", { fetch: w.f, now });
     expect(r.outcomes.map((o) => [o.providerId, o.served])).toEqual([
       ["botscan", "live"],
       ["botchain-rpc", "live"],
@@ -53,10 +53,10 @@ describe("provider orchestration", () => {
 
   it("serves a repeat within the TTL from cache, marked cached, without calling out", async () => {
     const w = world();
-    await fetchEvidence(ADDR, "bohr", { fetch: w.f, now });
+    await fetchEvidence(ADDR, "botchain", { fetch: w.f, now });
     const before = w.count();
     clock += CACHE_TTL_MS - 1000;
-    const r = await fetchEvidence(ADDR, "bohr", { fetch: w.f, now });
+    const r = await fetchEvidence(ADDR, "botchain", { fetch: w.f, now });
     expect(w.count()).toBe(before);
     expect(r.outcomes.every((o) => o.served === "cache")).toBe(true);
     expect(r.records.filter((x) => x.status !== "unavailable").every((x) => x.status === "cached")).toBe(true);
@@ -66,35 +66,35 @@ describe("provider orchestration", () => {
 
   it("reads again after the TTL", async () => {
     const w = world();
-    await fetchEvidence(ADDR, "bohr", { fetch: w.f, now });
+    await fetchEvidence(ADDR, "botchain", { fetch: w.f, now });
     const before = w.count();
     clock += CACHE_TTL_MS + 1;
-    const r = await fetchEvidence(ADDR, "bohr", { fetch: w.f, now });
+    const r = await fetchEvidence(ADDR, "botchain", { fetch: w.f, now });
     expect(w.count()).toBeGreaterThan(before);
     expect(r.outcomes.every((o) => o.served === "live")).toBe(true);
   });
 
   it("does not cache an outage, and records it in health", async () => {
     const down = world({ rpcDown: true });
-    const r = await fetchEvidence(ADDR, "bohr", { fetch: down.f, now });
+    const r = await fetchEvidence(ADDR, "botchain", { fetch: down.f, now });
     expect(r.outcomes.find((o) => o.providerId === "botchain-rpc")).toMatchObject({ served: "error", error: { code: "timeout" } });
     const h = providerHealth().find((p) => p.id === "botchain-rpc");
     expect(h?.lastError?.message).toBe("Did not answer in time.");
     // the next call tries again instead of serving the failure
     const up = world();
-    const again = await fetchEvidence(ADDR, "bohr", { fetch: up.f, now });
+    const again = await fetchEvidence(ADDR, "botchain", { fetch: up.f, now });
     expect(again.outcomes.find((o) => o.providerId === "botchain-rpc")?.served).toBe("live");
   });
 
   it("returns both disagreeing supplies so the brief can flag the conflict", async () => {
     const w = world({ supplyRpc: "1100" });
-    const r = await fetchEvidence(ADDR, "bohr", { fetch: w.f, now });
+    const r = await fetchEvidence(ADDR, "botchain", { fetch: w.f, now });
     expect(r.records.filter((x) => x.metricName === "Total supply").map((x) => x.value).sort()).toEqual(["1,000", "1,100"]);
   });
 
   it("runs only the providers switched on", async () => {
     vi.stubEnv("NEXT_PUBLIC_LOXEN_PROVIDERS", "botscan");
-    const r = await fetchEvidence(ADDR, "bohr", { fetch: world().f, now });
+    const r = await fetchEvidence(ADDR, "botchain", { fetch: world().f, now });
     expect(r.outcomes.map((o) => o.providerId)).toEqual(["botscan"]);
     expect(providerHealth().map((p) => p.id)).toEqual(["botscan"]);
   });

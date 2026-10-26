@@ -45,14 +45,14 @@ wallet interaction, as built on 19 October 2026. Contract-specific detail is in
 | 13 | Front-running or copying a digest | The receipt binds to `msg.sender`; a copier gets their own receipt, not yours | Low |
 | 14 | Registry spam | Each registration costs the sender gas and touches only their own storage; reads are bounded (page cap 100, events over 50,000 blocks) | Low |
 | 15 | Pause-admin key compromise | Worst case: registrations paused. Receipts cannot be edited or deleted; reads never pause; renounce refused while paused | Use a multisig or hardware wallet for mainnet |
-| 16 | Deployer key leak from `contracts/.env` | File is gitignored; the deploy script never prints it; README requires a testnet-only key there and a keystore for mainnet | A plaintext key on disk is acceptable only for testnet |
+| 16 | Deployer key leak | The only deploy script reads from an encrypted Foundry keystore, never from a file, and never prints the key | Low |
 | 17 | Frontend and contract drift apart | `npm run check:abi` fails on any mismatch; the digest scheme is pinned by an independent test vector | Low |
-| 18 | Stale network configuration | Chain IDs and URLs live in one file and were re-checked against the official guide; the deploy script refuses any chain but 968, 677 or local | Re-check before mainnet |
+| 18 | Stale network configuration | Chain IDs and URLs live in one file and were re-checked against the official guide; the deploy script refuses any chain but 677 or local | Re-check before mainnet |
 
 ## Not covered yet
 
 - No external audit of the contract. It was deployed to mainnet on 25 Oct 2026 after 21 tests, a 512-run fuzz test and a clean Slither run, at the owner's decision; an audit is still recommended.
-- The mainnet pause admin is a single wallet whose key has also been kept in a plaintext file for testnet. Moving ownership to a hardware wallet or multisig (`transferOwnership`, then `acceptOwnership`) is recommended.
+- The mainnet pause admin is a single wallet whose key has also been kept in a plaintext file (`contracts/.env`). Moving ownership to a hardware wallet or multisig (`transferOwnership`, then `acceptOwnership`) is recommended.
 - No shared rate-limit store for multi-instance hosting.
 - No content-security policy headers are configured yet.
 - Legal review of Privacy and Terms.

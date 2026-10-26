@@ -15,7 +15,6 @@ remappings = [
 runs = 512
 
 [rpc_endpoints]
-bot_testnet = "${BOT_TESTNET_RPC_URL}"
 bot_mainnet = "${BOT_MAINNET_RPC_URL}"
 
 # Verification on BOTScan (Blockscout-style explorers). Re-check the API URL against

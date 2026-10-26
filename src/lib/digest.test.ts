@@ -27,7 +27,7 @@ describe("digest", () => {
   it("binds the owner and chain", () => {
     const owner = "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed";
     expect(digestOf({ brief, salt, owner })).not.toBe(digestOf({ brief, salt }));
-    expect(digestOf({ brief, salt, owner, chainId: 677 })).not.toBe(digestOf({ brief, salt, owner, chainId: 968 }));
+    expect(digestOf({ brief, salt, owner, chainId: 677 })).not.toBe(digestOf({ brief, salt, owner, chainId: 31337 }));
   });
   it("ignores the letter case of the owner address", () => {
     const owner = "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed";
@@ -35,11 +35,11 @@ describe("digest", () => {
   });
   it("matches a fixed vector computed independently, so the scheme cannot drift silently", () => {
     // keccak256 of the canonical envelope, computed outside Loxen with Foundry:
-    // cast keccak '{"brief":{"question":"Is the pool deep enough?"},"chainId":968,"domain":"loxen.research-receipt",
+    // cast keccak '{"brief":{"question":"Is the pool deep enough?"},"chainId":677,"domain":"loxen.research-receipt",
     //   "owner":"0x0000000000000000000000000000000000000001","salt":"0x1111…1111","schema":"loxen.brief/1"}'
     // Changing this breaks verification of every receipt already on-chain.
-    expect(digestOf({ brief, salt, owner: "0x0000000000000000000000000000000000000001", chainId: 968 })).toBe(
-      "0x78589b488b67a7fb330ccf32509d41867da1a9a01a8f8274d82a6dfb628ab33d",
+    expect(digestOf({ brief, salt, owner: "0x0000000000000000000000000000000000000001", chainId: 677 })).toBe(
+      "0x8f25bda44db84fd0755d4859e7f259eb5a9c6fff277fa09adc7351b5377dd443",
     );
   });
 });
@@ -49,7 +49,7 @@ describe("what is committed", () => {
     id: "b",
     schema: SCHEMA_ID,
     question: "q",
-    asset: { query: "", network: "bohr", contract: "" },
+    asset: { query: "", network: "botchain", contract: "" },
     horizon: "weeks",
     lens: "liquidity",
     evidence: [],
@@ -60,7 +60,7 @@ describe("what is committed", () => {
     privateNotes: "my sizing",
     createdAt: "t",
     updatedAt: "t",
-    receipt: { receiptId: "1", digest: "0x", owner: "0x", chainId: 968, txHash: "0x", blockNumber: 1, blockTime: "t" },
+    receipt: { receiptId: "1", digest: "0x", owner: "0x", chainId: 677, txHash: "0x", blockNumber: 1, blockTime: "t" },
   };
   it("leaves private notes and the receipt out by default", () => {
     const c = committable(b, false) as Record<string, unknown>;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CREDITS } from "@/lib/credits";
-import { BOT_MAINNET, BOT_TESTNET } from "@/lib/chains";
+import { BOT_MAINNET, BOT_WEBSITE } from "@/lib/chains";
 
 const LETTERS = [
   { ch: "L", h: 100 },
@@ -44,14 +44,13 @@ export function SiteFooter() {
         <div>
           <h3>BOT Chain</h3>
           <ul>
-            <li><a className="link" href={BOT_MAINNET.explorer} rel="noopener">Mainnet explorer</a></li>
-            <li><a className="link" href={BOT_TESTNET.explorer} rel="noopener">Testnet explorer</a></li>
+            <li><a className="link" href={BOT_WEBSITE} rel="noopener">Official website</a></li>
+            <li><a className="link" href={BOT_MAINNET.explorer} rel="noopener">BOT Chain Explorer</a></li>
             <li><a className="link" href="https://dev-docs.botchain.ai/docs/Developers/quick-guide/" rel="noopener">Developer docs</a></li>
           </ul>
         </div>
         <div className="footer-chain">
           <p>BOT Chain mainnet, chain ID {BOT_MAINNET.id}</p>
-          <p>BOT Chain testnet, chain ID {BOT_TESTNET.id}</p>
         </div>
       </div>
 

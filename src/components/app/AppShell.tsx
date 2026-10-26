@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, FilePen, History, Stamp, Wallet } from "lucide-react";
 import { TagMark } from "@/components/site/TagMark";
+import { BOT_MAINNET, BOT_WEBSITE } from "@/lib/chains";
 
 const NAV = [
   { href: "/workbench", label: "Workbench", Icon: FilePen },
@@ -40,7 +41,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <span className="rail-label">Method</span>
         </Link>
       </nav>
-      <main className="canvas">{children}</main>
+      <main className="canvas">
+        {children}
+        <footer className="app-footer">
+          <span>Built on BOT Chain</span>
+          <a className="link" href={BOT_WEBSITE} rel="noopener">Official website</a>
+          <a className="link" href={BOT_MAINNET.explorer} rel="noopener">BOT Chain Explorer</a>
+        </footer>
+      </main>
     </div>
   );
 }
