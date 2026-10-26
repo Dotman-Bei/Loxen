@@ -3,3 +3,8 @@ cache/
 lib/
 broadcast/*/31337/
 .env
+test-wallets.json
+test-receipts/
+.tokens.json
+.build-test-receipts.ts
+.verify-test-receipts.ts

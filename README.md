@@ -124,10 +124,32 @@ after a confirmed transaction.
   process; on a multi-instance or serverless host they are best-effort, and a shared store (for example
   Redis) should replace them before heavy public use.
 
+## Team test activity on mainnet
+
+Receipts **1–10** on the mainnet registry were committed by the Loxen team on 26 October 2026 to test
+the receipt flow end to end, from these seven team-controlled wallets. They are test activity, not
+users, and are excluded from every usage and traction figure.
+
+| Wallet | Address | Receipts |
+| --- | --- | --- |
+| W1 | `0x9153472091929aD0aA89329E6DA99C9a5Ad40d47` | 1, 8 |
+| W2 | `0x227CF9A38Bb7767f9573bF4dD58F260A4f51D7dE` | 2, 9 |
+| W3 | `0x52B9d3B39a3C8181D623Fc90Cb77a0f6Dd9131ED` | 3, 10 |
+| W4 | `0x8462bd0d4D08135BA4d47e8B1907CC69B8175826` | 4 |
+| W5 | `0x957995699f768291dFA62Cef4b3a015e367a3048` | 5 |
+| W6 | `0x748986A194151456cF2F58d24a7d03B8976F7034` | 6 |
+| W7 | `0x26451CA13936d3e6159fD6f446E6C6fB7e564aC2` | 7 |
+
+The deployer and pause admin `0x0f30fF72C0934919D892Fb4BCe8b261F4B1A0B9E` is also a team wallet.
+Each test receipt is a real brief about a BOT Chain mainnet token with evidence fetched live by
+Loxen; all ten digests were recomputed from their receipt packages and match the chain.
+
 ## Known limitations
 
 - No DEX or price source is integrated, so market-structure and liquidity values are entered by hand.
 - BOTScan exposes all-time transfer counts only; "transfers in the horizon" is entered by hand.
+- BOTScan's address endpoint can take over 40 s for very busy tokens, so the BOTScan values for those
+  tokens come back unavailable within Loxen's 8 s limit (the RPC values still arrive).
 - Health and cache state reset when the server restarts.
 - Briefs are per browser. Clearing site data deletes them; export what you want to keep.
 - Privacy and Terms describe this build and have not had legal review.
